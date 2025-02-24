@@ -1,6 +1,8 @@
-site_name: My Project Documentation
+site_name: quantFin Documentation
+
 nav:
   - Home: index.md
-  - About: about.md
+  - API Documentation: api/index.html
+
 theme:
   name: material
