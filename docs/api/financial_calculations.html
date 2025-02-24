@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Financial Calculations API &#8212; quantFin 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=01f34227"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Results API Documentation" href="results.html" />
+    <link rel="prev" title="Stock API Documentation" href="underlyings.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="financial-calculations-api">
+<h1>Financial Calculations API<a class="headerlink" href="#financial-calculations-api" title="Link to this heading">¶</a></h1>
+<p>This section documents the functions in the financial_calculations package, including
+utility functions for put-call parity, implied rates, and perpetual put pricing.</p>
+<section id="financial-calculations-package">
+<span id="module-src.financial_calculations"></span><h2>financial_calculations package<a class="headerlink" href="#financial-calculations-package" title="Link to this heading">¶</a></h2>
+<p>This package provides utility functions for option pricing calculations, including:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Functions from parity_bounds.py:</dt><dd><ul>
+<li><p>put_call_parity: Computes the complementary option price via put-call parity.</p></li>
+<li><p>put_call_bound: Computes naive lower/upper bounds for call or put options.</p></li>
+<li><p>lower_bound_rate: Bounds risk-free rate from below using the put-call inequality.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Function from parity_implied_rate.py:</dt><dd><ul>
+<li><p>implied_rate: Solves numerically for implied risk-free rate via Brent’s method.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Function from perpetual_put.py:</dt><dd><ul>
+<li><p>perpetual_put: Prices a perpetual put option via a closed-form solution.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<section id="modules">
+<h3>Modules<a class="headerlink" href="#modules" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>parity_bounds</dt><dd><p>Provides put_call_parity, put_call_bound, and lower_bound_rate.</p>
+</dd>
+<dt>parity_implied_rate</dt><dd><p>Provides implied_rate.</p>
+</dd>
+<dt>perpetual_put</dt><dd><p>Provides perpetual_put.</p>
+</dd>
+</dl>
+</section>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.financial_calculations.implied_rate">
+<span class="sig-prename descclassname"><span class="pre">src.financial_calculations.</span></span><span class="sig-name descname"><span class="pre">implied_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">call_price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">put_price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#src.financial_calculations.implied_rate" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the implied risk-free rate from put-call parity.</p>
+<dl class="simple">
+<dt>For a European option with continuous dividend yield q, put-call parity states:</dt><dd><p>C - P = S * exp(-q * T) - K * exp(-r * T)</p>
+</dd>
+<dt>The function solves for r such that:</dt><dd><p>f(r) = S * exp(-q * T) - K * exp(-r * T) - (C - P) = 0</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>call_price</strong> (<em>float</em>) – Observed call price.</p></li>
+<li><p><strong>put_price</strong> (<em>float</em>) – Observed put price.</p></li>
+<li><p><strong>S</strong> (<em>float</em>) – Underlying spot price.</p></li>
+<li><p><strong>K</strong> (<em>float</em>) – Strike price.</p></li>
+<li><p><strong>T</strong> (<em>float</em>) – Time to maturity (in years).</p></li>
+<li><p><strong>q</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Continuous dividend yield (default is 0.0).</p></li>
+<li><p><strong>eps</strong> (<em>float</em><em>, </em><em>optional</em>) – Convergence tolerance for the root-finder (default is 1e-6).</p></li>
+<li><p><strong>max_iter</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum iterations for bracketing (default is 100).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The implied risk-free rate.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If a valid bracket for r cannot be found within max_iter iterations.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">implied_rate</span><span class="p">(</span><span class="mf">0.5287</span><span class="p">,</span> <span class="mf">6.7143</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">110</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="go">0.07999981808260372</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.financial_calculations.lower_bound_rate">
+<span class="sig-prename descclassname"><span class="pre">src.financial_calculations.</span></span><span class="sig-name descname"><span class="pre">lower_bound_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">call_price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">put_price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#src.financial_calculations.lower_bound_rate" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Compute a lower bound on the risk-free rate using the put-call inequality:</dt><dd><p>C - P &lt;= S - K * exp(-r*T)</p>
+</dd>
+<dt>Rearranging, the lower bound on r is given by:</dt><dd><p>r &gt;= - (1/T) * ln((S - C + P) / K)</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>call_price</strong> (<em>float</em>) – Observed call price.</p></li>
+<li><p><strong>put_price</strong> (<em>float</em>) – Observed put price.</p></li>
+<li><p><strong>S</strong> (<em>float</em>) – Underlying spot price.</p></li>
+<li><p><strong>K</strong> (<em>float</em>) – Strike price.</p></li>
+<li><p><strong>T</strong> (<em>float</em>) – Time to maturity in years.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Lower bound on the risk-free rate.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If (S - call_price + put_price) is not positive, making the logarithm undefined.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lower_bound_rate</span><span class="p">(</span><span class="mf">0.5287</span><span class="p">,</span> <span class="mf">6.7143</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">110</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="go">0.07058371879701723</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.financial_calculations.perpetual_put">
+<span class="sig-prename descclassname"><span class="pre">src.financial_calculations.</span></span><span class="sig-name descname"><span class="pre">perpetual_put</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#src.financial_calculations.perpetual_put" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the price of a perpetual put option.</p>
+<p>The pricing is based on solving the ODE that arises from the optimal stopping
+problem of an American put with no expiration. The closed-form solution is given by:</p>
+<blockquote>
+<div><p>Price = (K / (1 - beta)) * (((beta - 1) / beta) * (S / K))**beta</p>
+</div></blockquote>
+<p>where beta is the negative root of the quadratic equation derived from the model:</p>
+<blockquote>
+<div><p>vol^2 * beta^2 + 2 * (r - q - vol^2 / 2) * beta - 2 * r = 0</p>
+</div></blockquote>
+<p>In this implementation, beta is computed as:</p>
+<blockquote>
+<div><p>beta = - (b + sqrt(discriminant)) / vol_sq</p>
+</div></blockquote>
+<dl class="simple">
+<dt>with:</dt><dd><p>vol_sq = vol**2,
+b = r - q - vol_sq/2,
+discriminant = b**2 + 2 * r * vol_sq.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>S</strong> (<em>float</em>) – Current stock price.</p></li>
+<li><p><strong>K</strong> (<em>float</em>) – Strike price of the option.</p></li>
+<li><p><strong>r</strong> (<em>float</em>) – Annualized risk-free interest rate (continuously compounded).</p></li>
+<li><p><strong>vol</strong> (<em>float</em>) – Volatility of the stock.</p></li>
+<li><p><strong>q</strong> (<em>float</em>) – Continuous dividend yield.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The price of the perpetual put option.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If r is zero (the model requires r != 0).</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">perpetual_put</span><span class="p">(</span><span class="n">S</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">K</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mf">0.08</span><span class="p">,</span> <span class="n">vol</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mf">0.005</span><span class="p">)</span>
+<span class="go">1.8344292693352158</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.financial_calculations.put_call_bound">
+<span class="sig-prename descclassname"><span class="pre">src.financial_calculations.</span></span><span class="sig-name descname"><span class="pre">put_call_bound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">option_price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bound_call</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.financial_calculations.put_call_bound" title="Link to this definition">¶</a></dt>
+<dd><p>Compute lower and upper bounds for a European or dividend-less American option using
+put-call inequalities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>option_price</strong> (<em>float</em>) – The known option price.</p></li>
+<li><p><strong>S</strong> (<em>float</em>) – Underlying spot price.</p></li>
+<li><p><strong>K</strong> (<em>float</em>) – Strike price.</p></li>
+<li><p><strong>r</strong> (<em>float</em>) – Risk-free rate (continuously compounded).</p></li>
+<li><p><strong>T</strong> (<em>float</em>) – Time to maturity in years.</p></li>
+<li><p><strong>bound_call</strong> (<em>bool</em><em>, </em><em>default False</em>) – If True, compute bounds for a call; otherwise, for a put.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple (lower_bound, upper_bound).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.financial_calculations.put_call_parity">
+<span class="sig-prename descclassname"><span class="pre">src.financial_calculations.</span></span><span class="sig-name descname"><span class="pre">put_call_parity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">option_price</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">price_call</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#src.financial_calculations.put_call_parity" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the complementary European option price using put-call parity.</p>
+<dl class="simple">
+<dt>The put-call parity formula is:</dt><dd><p>C - P = S * exp(-q*T) - K * exp(-r*T)</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>option_price</strong> (<em>float</em>) – The known option price. If <cite>price_call</cite> is False, this is interpreted as
+the put price; if True, as the call price.</p></li>
+<li><p><strong>S</strong> (<em>float</em>) – Current underlying spot price.</p></li>
+<li><p><strong>K</strong> (<em>float</em>) – Strike price.</p></li>
+<li><p><strong>r</strong> (<em>float</em>) – Annualized, continuously compounded risk-free rate.</p></li>
+<li><p><strong>T</strong> (<em>float</em>) – Time to maturity in years.</p></li>
+<li><p><strong>q</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Continuous dividend yield (default is 0.0).</p></li>
+<li><p><strong>price_call</strong> (<em>bool</em><em>, </em><em>default False</em>) – If True, <cite>option_price</cite> is a call price (and the computed value will be the
+corresponding put price). Otherwise, it is the put price (and the function
+returns the call price).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The computed price of the complementary option.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">put_call_parity</span><span class="p">(</span><span class="mf">6.71</span><span class="p">,</span> <span class="n">S</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">K</span><span class="o">=</span><span class="mi">110</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mf">0.08</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">price_call</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="go">0.5244096125126907</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">quantFin</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="instruments.html">Instruments API Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="market_environment.html">Market Environment API Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="underlyings.html">Stock  API Documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Financial Calculations API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#financial-calculations-package">financial_calculations package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#src.financial_calculations.implied_rate"><code class="docutils literal notranslate"><span class="pre">implied_rate()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#src.financial_calculations.lower_bound_rate"><code class="docutils literal notranslate"><span class="pre">lower_bound_rate()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#src.financial_calculations.perpetual_put"><code class="docutils literal notranslate"><span class="pre">perpetual_put()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#src.financial_calculations.put_call_bound"><code class="docutils literal notranslate"><span class="pre">put_call_bound()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#src.financial_calculations.put_call_parity"><code class="docutils literal notranslate"><span class="pre">put_call_parity()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="results.html">Results API Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="live.html">live Package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="underlyings.html" title="previous chapter">Stock  API Documentation</a></li>
+      <li>Next: <a href="results.html" title="next chapter">Results API Documentation</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Diljit Singh.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/financial_calculations.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

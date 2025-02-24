@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>live Package &#8212; quantFin 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=01f34227"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Results API Documentation" href="results.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="live-package">
+<h1>live Package<a class="headerlink" href="#live-package" title="Link to this heading">¶</a></h1>
+<p>This section documents the modules in the <cite>live</cite> package, which provide real-time
+or near-real-time data for market rates, stocks, and options, plus associated
+factory methods for building MarketEnvironment, Stock, and Option objects.</p>
+<section id="module-src.live">
+<span id="id1"></span><h2>live package<a class="headerlink" href="#module-src.live" title="Link to this heading">¶</a></h2>
+<p>This package provides live market data retrieval and context creation for
+option pricing. It includes modules for interacting with external APIs
+(FRED for interest rates, Polygon for stock/option data) and building
+objects like MarketEnvironment, Stock, and EuropeanOption with real(ish) data.</p>
+<section id="modules">
+<h3>Modules<a class="headerlink" href="#modules" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>fred_data_provider</dt><dd><p>Defines the FredDataProvider class for fetching Treasury yields and rates from FRED.</p>
+</dd>
+<dt>market_rate_provider</dt><dd><p>Defines get_market_environment_by_maturity, returning a MarketEnvironment with
+an interpolated yield for a specified maturity.</p>
+</dd>
+<dt>polygon_data_provider</dt><dd><p>Defines the PolygonDataProvider class for fetching equities/options data
+from Polygon, including spot price, historical volatility, and
+OSI symbol parsing.</p>
+</dd>
+<dt>market_option_provider</dt><dd><p>Defines functions that combine Polygon data and FRED rates to create Stock, Option,
+and MarketEnvironment objects (e.g., create_full_market_context).</p>
+</dd>
+</dl>
+</section>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.live.FredDataProvider">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.live.</span></span><span class="sig-name descname"><span class="pre">FredDataProvider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fred_api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fred_rate_limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secrets_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'configs/secrets.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provider_settings_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'configs/provider_settings.yaml'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.live.FredDataProvider" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Provides methods to fetch Treasury rates and other series from the FRED API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fred_api_key</strong> (<em>str</em><em>, </em><em>optional</em>) – FRED API key override. If not provided, attempts to load from secrets config.</p></li>
+<li><p><strong>fred_rate_limit</strong> (<em>int</em><em>, </em><em>optional</em>) – Rate limit for FRED API calls. If not provided, attempts to load
+from provider settings.</p></li>
+<li><p><strong>secrets_path</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to secrets.yaml file containing ‘fred.api_key’.
+Default is ‘configs/secrets.yaml’.</p></li>
+<li><p><strong>provider_settings_path</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to provider_settings.yaml containing ‘fred.rate_limit’.
+Default is ‘configs/provider_settings.yaml’.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.live.FredDataProvider.BASE_URL">
+<span class="sig-name descname"><span class="pre">BASE_URL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'https://api.stlouisfed.org/fred'</span></em><a class="headerlink" href="#src.live.FredDataProvider.BASE_URL" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.live.FredDataProvider.fetch_series_observations">
+<span class="sig-name descname"><span class="pre">fetch_series_observations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">series_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#src.live.FredDataProvider.fetch_series_observations" title="Link to this definition">¶</a></dt>
+<dd><p>Fetch observations for a given FRED series.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>series_id</strong> (<em>str</em>) – The FRED series ID (e.g., ‘DTB3’ for 3-Month Treasury Bill).</p></li>
+<li><p><strong>**kwargs</strong> (<em>dict</em>) – Additional query parameters for the API request.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>JSON response as a dictionary (parsed from FRED’s API).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>SystemExit</strong> – If there’s an error fetching data from the API.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.live.FredDataProvider.get_federal_funds_rate">
+<span class="sig-name descname"><span class="pre">get_federal_funds_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">series_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'FEDFUNDS'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#src.live.FredDataProvider.get_federal_funds_rate" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve the latest Federal Funds Rate (overnight lending rate) from FRED.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>series_id</strong> (<em>str</em>) – FRED series ID for the Fed Funds rate (default is ‘FEDFUNDS’).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Latest Fed Funds rate (as a decimal).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If no observations are found or the rate is invalid.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.live.FredDataProvider.get_generic_rate">
+<span class="sig-name descname"><span class="pre">get_generic_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">series_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#src.live.FredDataProvider.get_generic_rate" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve the latest rate (or yield) for a generic FRED series.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>series_id</strong> (<em>str</em>) – The FRED series ID (e.g., ‘DGS10’ for 10-year treasury).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Latest rate or yield (as a decimal).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If no observations are found or the rate is invalid.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.live.FredDataProvider.get_long_term_rate">
+<span class="sig-name descname"><span class="pre">get_long_term_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maturity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#src.live.FredDataProvider.get_long_term_rate" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve the long-term rate for a given maturity by interpolating a yield curve.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>maturity</strong> (<em>float</em>) – The target maturity in years (e.g., 1.34 or 5.0).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The interpolated long-term rate (as a decimal).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If interpolation fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.live.FredDataProvider.get_short_term_rate">
+<span class="sig-name descname"><span class="pre">get_short_term_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">series_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'DTB3'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#src.live.FredDataProvider.get_short_term_rate" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve the latest short-term Treasury Bill rate from FRED
+e.g., 3-month T-bill.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>series_id</strong> (<em>str</em>) – FRED series ID for the short-term T-bill rate (default is ‘DTB3’).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Latest T-bill rate (as a decimal, e.g., 0.02 for 2%).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If no observations are found or the rate is invalid.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.live.FredDataProvider.get_yield_curve">
+<span class="sig-name descname"><span class="pre">get_yield_curve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">series_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.live.FredDataProvider.get_yield_curve" title="Link to this definition">¶</a></dt>
+<dd><p>Fetch the latest yields for multiple maturities from FRED concurrently.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>series_map</strong> (<em>dict</em>) – A dictionary mapping maturity (float) to FRED series ID (str).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary mapping maturity (float) to yield (float, in decimal form).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>SystemExit</strong> – If an error occurs fetching data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.live.FredDataProvider.interpolate_yield">
+<span class="sig-name descname"><span class="pre">interpolate_yield</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_maturity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yield_curve</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#src.live.FredDataProvider.interpolate_yield" title="Link to this definition">¶</a></dt>
+<dd><p>Interpolate a yield for the given target maturity from a yield curve.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target_maturity</strong> (<em>float</em>) – The maturity in years (e.g., 4.5).</p></li>
+<li><p><strong>yield_curve</strong> (<em>dict</em>) – Maps maturity (float) to yield (float, as decimal).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The interpolated yield (as decimal).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If interpolation fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.live.FredDataProvider.main_cli">
+<span class="sig-name descname"><span class="pre">main_cli</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.live.FredDataProvider.main_cli" title="Link to this definition">¶</a></dt>
+<dd><p>CLI usage: fetch and print short-term, FedFunds, generic, long-term rates.</p>
+<dl class="simple">
+<dt>Usage:</dt><dd><p>python fred_data_provider.py –mode short-term
+python fred_data_provider.py –mode fedfunds
+python fred_data_provider.py –mode generic –series_id DGS10
+python fred_data_provider.py –mode long-term –maturity 5.0</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.live.PolygonDataProvider">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.live.</span></span><span class="sig-name descname"><span class="pre">PolygonDataProvider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">polygon_api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polygon_rate_limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secrets_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'configs/secrets.yaml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provider_settings_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'configs/provider_settings.yaml'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.live.PolygonDataProvider" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Provides methods to fetch market data (spot prices, historical prices, etc.)
+for equities and to parse/compute data for options from the Polygon API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>polygon_api_key</strong> (<em>str</em><em>, </em><em>optional</em>) – Override for the Polygon API key (default None).
+If not provided, it tries to load from secrets config.</p></li>
+<li><p><strong>polygon_rate_limit</strong> (<em>int</em><em>, </em><em>optional</em>) – Override for the rate limit (default None).
+If not provided, it tries to load from provider settings.</p></li>
+<li><p><strong>secrets_path</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to secrets.yaml. Defaults to “configs/secrets.yaml”.</p></li>
+<li><p><strong>provider_settings_path</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to provider_settings.yaml. Defaults to “configs/provider_settings.yaml”.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This class does not implement actual rate limiting (sleep, token bucket, etc.).
+The rate limit setting is available if you need to add throttling logic.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.live.PolygonDataProvider.BASE_URL">
+<span class="sig-name descname"><span class="pre">BASE_URL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'https://api.polygon.io'</span></em><a class="headerlink" href="#src.live.PolygonDataProvider.BASE_URL" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.live.PolygonDataProvider.compute_historical_volatility">
+<span class="sig-name descname"><span class="pre">compute_historical_volatility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#src.live.PolygonDataProvider.compute_historical_volatility" title="Link to this definition">¶</a></dt>
+<dd><p>Compute annualized historical volatility (as %) from daily closing prices.</p>
+<p>Uses the standard deviation of log returns multiplied by sqrt(252).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>prices</strong> (<em>list</em>) – A list of daily closing prices.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Annualized volatility as a percentage (e.g., 30.0 for 30%).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>SystemExit</strong> – If insufficient price data is provided.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.live.PolygonDataProvider.get_historical_prices">
+<span class="sig-name descname"><span class="pre">get_historical_prices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stock_symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#src.live.PolygonDataProvider.get_historical_prices" title="Link to this definition">¶</a></dt>
+<dd><p>Fetch historical daily closing prices for the stock between two dates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stock_symbol</strong> (<em>str</em>) – The stock ticker symbol (e.g., ‘AAPL’).</p></li>
+<li><p><strong>from_date</strong> (<em>str</em>) – Start date in ‘YYYY-MM-DD’ format.</p></li>
+<li><p><strong>to_date</strong> (<em>str</em>) – End date in ‘YYYY-MM-DD’ format.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of daily closing prices (floats).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>SystemExit</strong> – If the request fails or no valid data is returned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.live.PolygonDataProvider.get_option_data">
+<span class="sig-name descname"><span class="pre">get_option_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">option_symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.live.PolygonDataProvider.get_option_data" title="Link to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Fetch relevant data for a given option, including:</dt><dd><ul class="simple">
+<li><p>parsed OSI fields (underlying, expiration, type, strike),</p></li>
+<li><p>spot price,</p></li>
+<li><p>historical volatility from ~60 trading days,</p></li>
+<li><p>placeholders for dividend info (not implemented).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>option_symbol</strong> (<em>str</em>) – OSI-formatted symbol (e.g. ‘O:SPY210917C00450000’).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Contains ‘underlying’, ‘expiration’, ‘option_type’, ‘strike’, ‘spot_price’,
+‘historical_volatility’, and placeholders for ‘dividend_info’.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>SystemExit</strong> – If any step in the process fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.live.PolygonDataProvider.get_previous_close">
+<span class="sig-name descname"><span class="pre">get_previous_close</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stock_symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#src.live.PolygonDataProvider.get_previous_close" title="Link to this definition">¶</a></dt>
+<dd><p>Fetch the previous close price for a given stock symbol.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stock_symbol</strong> (<em>str</em>) – The stock ticker symbol.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The previous close price.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>SystemExit</strong> – If the API call fails or invalid data is returned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.live.PolygonDataProvider.get_spot_price">
+<span class="sig-name descname"><span class="pre">get_spot_price</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stock_symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#src.live.PolygonDataProvider.get_spot_price" title="Link to this definition">¶</a></dt>
+<dd><p>Fetch the latest spot price for a given stock symbol from Polygon,
+falling back to previous close if realtime data is forbidden.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stock_symbol</strong> (<em>str</em>) – Stock ticker symbol (e.g., ‘AAPL’).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Latest spot price or previous close price.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>SystemExit</strong> – If the data is invalid or calls fail.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.live.PolygonDataProvider.main_cli">
+<span class="sig-name descname"><span class="pre">main_cli</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.live.PolygonDataProvider.main_cli" title="Link to this definition">¶</a></dt>
+<dd><p>Mini-CLI entry point to fetch data for a stock symbol or an option symbol.</p>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>python polygon_data_provider.py –mode stock –symbol AAPL
+python polygon_data_provider.py –mode option –option-symbol O:SPY210917C00450000</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.live.PolygonDataProvider.parse_option_symbol">
+<span class="sig-name descname"><span class="pre">parse_option_symbol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">option_symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.live.PolygonDataProvider.parse_option_symbol" title="Link to this definition">¶</a></dt>
+<dd><p>Parse OSI option symbol; extract underlying, expiration, type, strike.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>option_symbol</strong> (<em>str</em>) – The option symbol (e.g. ‘O:SPY210917C00450000’).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Fields: underlying (str), expiration (datetime),</dt><dd><p>option_type (str), strike (float).</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>SystemExit</strong> – If the symbol does not match the OSI format or parsing fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.live.create_full_market_context">
+<span class="sig-prename descclassname"><span class="pre">src.live.</span></span><span class="sig-name descname"><span class="pre">create_full_market_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">option_symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.live.create_full_market_context" title="Link to this definition">¶</a></dt>
+<dd><p>Creates a MarketEnvironment, Stock, and EuropeanOption instance.</p>
+<ol class="arabic simple">
+<li><p>Fetch option data from PolygonDataProvider</p></li>
+<li><p>Compute time-to-expiry from the option’s expiration date (in years).</p></li>
+<li><p>Retrieve a risk-free rate from FRED using get_market_environment_by_maturity().</p></li>
+<li><p>Initialize a Stock instance.</p></li>
+<li><p>Initialize a EuropeanOption with the strike, maturity, and is_call.</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>option_symbol</strong> (<em>str</em>) – OSI-formatted option symbol (e.g. “O:SPY251219C00650000”).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A tuple containing:</dt><dd><ul class="simple">
+<li><p>MarketEnvironment with rate from FRED,</p></li>
+<li><p>Stock with spot, volatility, etc. from Polygon,</p></li>
+<li><p>EuropeanOption reflecting the parsed strike, expiration, and call/put.</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(<a class="reference internal" href="market_environment.html#src.market.market_environment.MarketEnvironment" title="src.market.market_environment.MarketEnvironment">MarketEnvironment</a>, <a class="reference internal" href="underlyings.html#src.underlyings.stock.Stock" title="src.underlyings.stock.Stock">Stock</a>, <a class="reference internal" href="instruments.html#src.instruments.EuropeanOption" title="src.instruments.EuropeanOption">EuropeanOption</a>)</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>SystemExit</strong> – If the option has expired or data retrieval fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.live.get_market_environment_by_maturity">
+<span class="sig-prename descclassname"><span class="pre">src.live.</span></span><span class="sig-name descname"><span class="pre">get_market_environment_by_maturity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maturity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="market_environment.html#src.market.market_environment.MarketEnvironment" title="src.market.market_environment.MarketEnvironment"><span class="pre">MarketEnvironment</span></a></span></span><a class="headerlink" href="#src.live.get_market_environment_by_maturity" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve the risk-free rate for the specified maturity and return it as a
+MarketEnvironment instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>maturity</strong> (<em>float</em>) – The target maturity in years (e.g., 1.34 or 5.0).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An instance of MarketEnvironment with its rate set to the interpolated
+long‑term rate for the given maturity.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="market_environment.html#src.market.market_environment.MarketEnvironment" title="src.market.market_environment.MarketEnvironment">MarketEnvironment</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the rate cannot be retrieved or interpolation fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.live.init_european_option_stock_market_env">
+<span class="sig-prename descclassname"><span class="pre">src.live.</span></span><span class="sig-name descname"><span class="pre">init_european_option_stock_market_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.live.init_european_option_stock_market_env" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize a MarketEnvironment, Stock, and EuropeanOption instance from dict.</p>
+<p>This function does NOT fetch any data from external APIs. It simply uses
+the provided arguments to create the objects.</p>
+<dl class="simple">
+<dt>Expected keys in <cite>params</cite>:</dt><dd><p>spot (float): Underlying stock spot price
+volatility (float): Annualized volatility as a decimal (e.g., 0.20 for 20%)
+dividend (float): Continuous dividend yield or approximate
+symbol (str): Ticker symbol for the Stock
+strike (float): Option strike price
+maturity (float): Time to expiration in years
+is_call (bool): True for a call, False for a put
+rate (float): Risk-free rate (decimal, e.g., 0.05 for 5%)</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>params</strong> (<em>dict</em>) – A dictionary containing stock and option parameters.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Instances of the classes reflecting the provided parameters.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(<a class="reference internal" href="market_environment.html#src.market.market_environment.MarketEnvironment" title="src.market.market_environment.MarketEnvironment">MarketEnvironment</a>, <a class="reference internal" href="underlyings.html#src.underlyings.stock.Stock" title="src.underlyings.stock.Stock">Stock</a>, <a class="reference internal" href="instruments.html#src.instruments.EuropeanOption" title="src.instruments.EuropeanOption">EuropeanOption</a>)</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>KeyError</strong> – If required keys are missing.</p></li>
+<li><p><strong>ValueError</strong> – If any parameter is invalid (e.g., negative maturity, negative spot, etc.).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">quantFin</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="instruments.html">Instruments API Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="market_environment.html">Market Environment API Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="underlyings.html">Stock  API Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="financial_calculations.html">Financial Calculations API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="results.html">Results API Documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">live Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-src.live">live package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#src.live.FredDataProvider"><code class="docutils literal notranslate"><span class="pre">FredDataProvider</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#src.live.PolygonDataProvider"><code class="docutils literal notranslate"><span class="pre">PolygonDataProvider</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#src.live.create_full_market_context"><code class="docutils literal notranslate"><span class="pre">create_full_market_context()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#src.live.get_market_environment_by_maturity"><code class="docutils literal notranslate"><span class="pre">get_market_environment_by_maturity()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#src.live.init_european_option_stock_market_env"><code class="docutils literal notranslate"><span class="pre">init_european_option_stock_market_env()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="results.html" title="previous chapter">Results API Documentation</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Diljit Singh.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/live.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

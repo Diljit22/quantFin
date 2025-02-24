@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>quantFin documentation &#8212; quantFin 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=01f34227"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Instruments API Documentation" href="instruments.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="quantfin-documentation">
+<h1>quantFin documentation<a class="headerlink" href="#quantfin-documentation" title="Link to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="instruments.html">Instruments API Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="instruments.html#instruments-package">instruments package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="instruments.html#src.instruments.AmericanOption"><code class="docutils literal notranslate"><span class="pre">AmericanOption</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="instruments.html#src.instruments.BaseOption"><code class="docutils literal notranslate"><span class="pre">BaseOption</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="instruments.html#src.instruments.BermudanOption"><code class="docutils literal notranslate"><span class="pre">BermudanOption</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="instruments.html#src.instruments.EuropeanOption"><code class="docutils literal notranslate"><span class="pre">EuropeanOption</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="instruments.html#src.instruments.EuropeanOptionVector"><code class="docutils literal notranslate"><span class="pre">EuropeanOptionVector</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="market_environment.html">Market Environment API Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="market_environment.html#market-environment-py">market_environment.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="market_environment.html#src.market.market_environment.MarketEnvironment"><code class="docutils literal notranslate"><span class="pre">MarketEnvironment</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="underlyings.html">Stock  API Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="underlyings.html#stock-py">stock.py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="underlyings.html#src.underlyings.stock.Stock"><code class="docutils literal notranslate"><span class="pre">Stock</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="financial_calculations.html">Financial Calculations API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="financial_calculations.html#financial-calculations-package">financial_calculations package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="financial_calculations.html#src.financial_calculations.implied_rate"><code class="docutils literal notranslate"><span class="pre">implied_rate()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="financial_calculations.html#src.financial_calculations.lower_bound_rate"><code class="docutils literal notranslate"><span class="pre">lower_bound_rate()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="financial_calculations.html#src.financial_calculations.perpetual_put"><code class="docutils literal notranslate"><span class="pre">perpetual_put()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="financial_calculations.html#src.financial_calculations.put_call_bound"><code class="docutils literal notranslate"><span class="pre">put_call_bound()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="financial_calculations.html#src.financial_calculations.put_call_parity"><code class="docutils literal notranslate"><span class="pre">put_call_parity()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="results.html">Results API Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="results.html#results-package">results package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="results.html#src.results.OptionEvaluation"><code class="docutils literal notranslate"><span class="pre">OptionEvaluation</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="live.html">live Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="live.html#module-src.live">live package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="live.html#src.live.FredDataProvider"><code class="docutils literal notranslate"><span class="pre">FredDataProvider</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="live.html#src.live.PolygonDataProvider"><code class="docutils literal notranslate"><span class="pre">PolygonDataProvider</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="live.html#src.live.create_full_market_context"><code class="docutils literal notranslate"><span class="pre">create_full_market_context()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="live.html#src.live.get_market_environment_by_maturity"><code class="docutils literal notranslate"><span class="pre">get_market_environment_by_maturity()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="live.html#src.live.init_european_option_stock_market_env"><code class="docutils literal notranslate"><span class="pre">init_european_option_stock_market_env()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">quantFin</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="instruments.html">Instruments API Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="market_environment.html">Market Environment API Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="underlyings.html">Stock  API Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="financial_calculations.html">Financial Calculations API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="results.html">Results API Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="live.html">live Package</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="instruments.html" title="next chapter">Instruments API Documentation</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Diljit Singh.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,9 @@
+Instruments API Documentation
+=============================
+
+This section documents the instruments package of quantFin.
+
+.. automodule:: src.instruments
+    :members:
+    :undoc-members:
+    :show-inheritance:
